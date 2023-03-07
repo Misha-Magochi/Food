@@ -281,7 +281,7 @@ thanksModal.remove();
 prevModalDialog.classList.add('show');
 prevModalDialog.classList.remove('hide');
 closeModal();
-  }, 2000);
+  }, 3000);
 }
 
     });
