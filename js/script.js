@@ -92,28 +92,25 @@ window.addEventListener('DOMContentLoaded', () => {
   
     const modalTrigger = document.querySelectorAll('[data-modal]'),
         modal = document.querySelector('.modal');
-        
-    
-    function openModel() {
+
+
+        function openModel() {
           modal.classList.add('show');
           modal.classList.remove('hide');
           document.body.style.overflow = 'hidden';
           clearInterval(modelTimerId);
         }
 
-        modalTrigger.forEach(btn => {
+            modalTrigger.forEach(btn => {
         btn.addEventListener('click', openModel)
     });
 
+                  function closeModal() {
+            modal.classList.add('hide');
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
+        }
 
-
-    function closeModal() {
-        modal.classList.add('hide');
-        modal.classList.remove('show');
-        document.body.style.overflow = '';
-    }
-    
-    
     modal.addEventListener('click', (e) => {
         if (e.target === modal || e.target.getAttribute('data-close') == '') {
             closeModal();
@@ -230,10 +227,6 @@ function postData(form) {
       statusMessage.textContent = message.loading;
       form.append(statusMessage);
 
-      const request = new XMLHttpRequest();
-      request.open('POST', 'server.php');
-
-      request.setRequestHeader('Content-type', 'application/json');
       const formData = new FormData(form);
 
       const object = {};
@@ -241,23 +234,22 @@ function postData(form) {
         object[key] = value;
       });
 
-      const json = JSON.stringify(object);
-
-      request.send(json);
-
-      /* request.send(formData); */
-
-      request.addEventListener('load', () => {
-        if (request.status === 200) {
-          console.log(request.response);
-          showThanksModal(message.success);
-          form.reset();
-          statusMessage.remove();
-          
-        } else {
-          showThanksModal(message.failure);
-        }
-      });
+      fetch('server.php', {
+        method: "POST",
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify(object)
+      }).then(data => data.text())
+        .then(data => {
+        console.log(data);
+        showThanksModal(message.success);
+        statusMessage.remove();
+      }).catch(() => {
+        showThanksModal(message.failure);
+      }).finally(() => {
+        form.reset();
+      })
    });
 }
 function showThanksModal(message) {
@@ -269,7 +261,7 @@ function showThanksModal(message) {
   const thanksModal = document.createElement('div');
   thanksModal.classList.add('modal__dialog');
   thanksModal.innerHTML =`
-  div class="modal__content">
+  <div class="modal__content">
   <div class="modal__close" data-close>×</div>
   <div class="modal__title">${message}</div>
   </div>
@@ -281,7 +273,10 @@ thanksModal.remove();
 prevModalDialog.classList.add('show');
 prevModalDialog.classList.remove('hide');
 closeModal();
-  }, 2000);
+  }, 4000);
 }
+
+
+
 
     });
