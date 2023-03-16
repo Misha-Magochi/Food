@@ -120,7 +120,7 @@ if (e.target === modal || e.target.getAttribute('data-close') == '') {
 }
 });
 document.addEventListener('keydown', (e) => {
-if (e.code === "Escape" && modal.classList.contains('show')) { 
+if (e.code === "Escape" && modal.classList.contains('show')) {
     closeModal();
 }
 });
@@ -156,8 +156,7 @@ this.price = this.price * this.transfer;
 render() {
 const element = document.createElement('div');
 if(this.classes.length === 0) {
-this.element = "menu__item";
-element.classList.add();
+element.classList.add("menu__item");
 } else {
 this.classes.forEach(className => element.classList.add(className));
 }
